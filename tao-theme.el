@@ -501,8 +501,8 @@ Also bind `class' to ((class color) (min-colors 89))."
    `(helm-swoop-target-line-block-face                ((t ( :foreground ,color-2 :background ,color-7))))
 
    ;; hl-line-mode
-   `(hl-line-face                                     ((,class (:background ,color-3)) (t :weight bold)))
-   `(hl-line                                          ((,class (:background ,color-3)) (t :weight bold)))
+   `(hl-line-face                                     ((,class (:background ,color-2)) (t :weight bold)))
+   `(hl-line                                          ((,class (:background ,color-2)) (t :weight bold)))
    ;; hl-sexp
    `(hl-sexp-face                                     ((,class (:background ,color-6)) (t :weight bold)))
    ;; ido-mode
@@ -661,6 +661,9 @@ Also bind `class' to ((class color) (min-colors 89))."
    `(mumamo-background-chunk-submode2                 ((t (:background ,color-7))))
    `(mumamo-background-chunk-submode3                 ((t (:background ,color-8))))
    `(mumamo-background-chunk-submode4                 ((t (:background ,color-6))))
+   ;; notmuch
+   `(notmuch-message-summary-face                     ((,class (:background ,color-5))))
+   `(notmuch-wash-cited-text                          ((,class (:foreground ,color-8))))
    ;; org-mode
    `(org-agenda-date-today                            ((t (:foreground ,color-14 :slant italic :weight bold))) t)
    `(org-agenda-clocking                              ((t (:foreground ,color-14 :weight bold))) t)
