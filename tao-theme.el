@@ -55,6 +55,11 @@
   :type 'boolean
   :group 'tao-theme)
 
+(defcustom tao-theme-use-boxes t
+  "Non-nil means tao-theme is allowed to use borders"
+  :type 'boolean
+  :group 'tao-theme)
+
 (defcustom tao-theme-use-sepia nil
   "Non-nil means tao-theme should use sepia tones for grayscale"
   :type 'boolean
@@ -81,6 +86,11 @@
 (defun tao-theme-height (height)
   (if tao-theme-use-height
       height 1.0))
+
+(defun tao-boxed (color)
+  (if tao-theme-use-boxes
+      color nil))
+
 
 ;; TODO refactor that into two `tao-theme-scale-to-colors` and `tao-sepia-filter`
 (defun tao-theme-scale-to-colors (scale)
@@ -154,6 +164,7 @@ Also bind `class' to ((class color) (min-colors 89))."
    `(link                                             ((t (:foreground ,color-13 :underline t :weight bold))))
    `(link-visited                                     ((t (:foreground ,color-11 :underline t :weight normal))))
    `(default                                          ((t (:foreground ,color-10 :background ,color-4 ))))
+   `(italic                                           ((t (:italic t ))))
    `(variable-pitch                                   ((t (:foreground ,color-9 :background ,color-4 :height ,(tao-theme-height 1.0)))))
    `(hl-paren-face                                    ((t (:foreground ,color-12 :background ,color-3))))
    `(cursor                                           ((t (:foreground ,color-13 :background ,color-14))))
@@ -210,14 +221,14 @@ Also bind `class' to ((class color) (min-colors 89))."
    `(font-lock-comment-delimiter-face                 ((t (:foreground ,color-9))))
    `(font-lock-constant-face                          ((t (:foreground ,color-8 :weight bold))))
    `(font-lock-doc-face                               ((t (:foreground ,color-9 :weight normal :italic t))))
-   `(font-lock-function-name-face                     ((t (:foreground ,color-10 :box ,color-8 :background ,color-5))))
-   `(font-lock-variable-name-face                     ((t (:foreground ,color-10 :box ,color-8 ))))
+   `(font-lock-function-name-face                     ((t (:foreground ,color-10 :box ,(tao-boxed color-8) :background ,color-5))))
+   `(font-lock-variable-name-face                     ((t (:box ,(tao-boxed color-7) ))))
    `(font-lock-negation-char-face                     ((t (:foreground ,color-14))))
    `(font-lock-preprocessor-face                      ((t (:foreground ,color-11))))
    `(font-lock-regexp-grouping-construct              ((t (:foreground ,color-13 :weight bold))))
    `(font-lock-regexp-grouping-backslash              ((t (:foreground ,color-9 :weight bold))))
    `(font-lock-string-face                            ((t (:foreground ,color-9 :italic nil))))
-   `(font-lock-type-face                              ((t (:foreground ,color-10 :underline t))))
+   `(font-lock-type-face                              ((t (:foreground ,color-8 :italic t :bold t))))
    `(font-lock-warning-face                           ((t (:inherit warning))))
    `(c-annotation-face                                ((t (:inherit font-lock-constant-face))))
    ;; newsticker
@@ -552,10 +563,10 @@ Also bind `class' to ((class color) (min-colors 89))."
    `(js2-jsdoc-value                                  ((t (:foreground ,color-9))))
    `(js2-jsdoc-html-tag-name                          ((t (:foreground ,color-10))))
    `(js2-jsdoc-html-tag-delimiter                     ((t (:foreground ,color-9))))
-   `(js2-function-param                               ((t (:foreground ,color-10))))
-   `(js2-function-call                                ((t (:foreground ,color-11 :underline t))))
+   `(js2-function-param                               ((t (:foreground ,color-9 :box ,(tao-boxed color-7)))))
+   `(js2-function-call                                ((t (:foreground ,color-12 :underline ,color-8))))
    `(js2-object-property                              ((t (:foreground ,color-10 ))))
-   `(js2-object-property-access                       ((t (:foreground ,color-10 :box ,color-6))))
+   `(js2-object-property-access                       ((t (:foreground ,color-10 :box ,(tao-boxed color-6)))))
    `(js2-external-variable                            ((t (:foreground ,color-14 :italic t ))))
 
    ;; jsx
@@ -661,8 +672,8 @@ Also bind `class' to ((class color) (min-colors 89))."
    `(mew-face-eof-message                             ((t (:foreground ,color-9))))
    `(mew-face-eof-part                                ((t (:foreground ,color-13))))
    ;; mic-paren
-   `(paren-face-match                                 ((t (:foreground ,color-14 :box ,color-8 ))))
-   `(paren-face-mismatch                              ((t (:foreground ,color-2 :background ,color-3 ))))
+   `(paren-face-match                                 ((t (:foreground ,color-14 :box ,(tao-boxed color-8) ))))
+   `(paren-face-mismatch                              ((t (:foreground ,color-1 :background ,color-6 ))))
    `(paren-face-no-match                              ((t (:foreground ,color-14 :background ,color-6 ))))
    ;; mingus
    `(mingus-directory-face                            ((t (:foreground ,color-11))))
@@ -698,7 +709,7 @@ Also bind `class' to ((class color) (min-colors 89))."
    `(notmuch-message-summary-face                     ((,class (:background ,color-5))))
    `(notmuch-wash-cited-text                          ((,class (:foreground ,color-8))))
    `(holiday                                          ((t (:background ,color-5 :weight bold))) t)
-   `(diary                                            ((t (:background ,color-4 :box t))) t)
+   `(diary                                            ((t (:background ,color-4 :box ,(tao-boxed t)))) t)
    ;; org-mode
    `(org-agenda-date-today                            ((t (:foreground ,color-14 :slant italic :weight bold))) t)
    `(org-agenda-clocking                              ((t (:foreground ,color-14 :weight bold))) t)
@@ -716,15 +727,16 @@ Also bind `class' to ((class color) (min-colors 89))."
    `(org-document-info                                ((t (:foreground ,color-7 :height ,(tao-theme-height 0.8)))))
    `(org-document-info-keyword                        ((t (:foreground ,color-7 :height ,(tao-theme-height 0.8)))))
    `(org-heading                                      ((t (:foreground ,color-14 :bold nil ))))
-   `(org-level-1                                      ((t ( :height ,(tao-theme-height 1.6) :inherit org-heading))))
-   `(org-level-2                                      ((t ( :height ,(tao-theme-height 1.5) :inherit org-heading))))
+   `(org-level-1                                      ((t ( :height ,(tao-theme-height 1.7) :inherit org-heading))))
+   `(org-level-2                                      ((t ( :height ,(tao-theme-height 1.6) :inherit org-heading))))
    `(org-level-3                                      ((t ( :height ,(tao-theme-height 1.4) :inherit org-heading))))
    `(org-level-4                                      ((t ( :height ,(tao-theme-height 1.3) :inherit org-heading))))
-   `(org-level-5                                      ((t ( :height ,(tao-theme-height 1.3) :inherit org-heading))))
-   `(org-level-6                                      ((t ( :height ,(tao-theme-height 1.3) :inherit org-heading))))
-   `(org-level-7                                      ((t ( :height ,(tao-theme-height 1.3) :inherit org-heading))))
-   `(org-level-8                                      ((t ( :height ,(tao-theme-height 1.3) :inherit org-heading))))
-   `(org-link                                         ((t (:foreground ,color-10 :underline ,color-8))))
+   `(org-level-5                                      ((t ( :height ,(tao-theme-height 1.2) :inherit org-heading))))
+   `(org-level-6                                      ((t ( :height ,(tao-theme-height 1.2) :inherit org-heading))))
+   `(org-level-7                                      ((t ( :height ,(tao-theme-height 1.2) :inherit org-heading))))
+   `(org-level-8                                      ((t ( :height ,(tao-theme-height 1.2) :inherit org-heading))))
+   `(org-link                                         ((t (:foreground ,color-8
+                                                                       :underline ,color-7))))
    `(org-scheduled                                    ((t (:foreground ,color-13))))
    `(org-scheduled-previously                         ((t (:foreground ,color-10))))
    `(org-scheduled-today                              ((t (:foreground ,color-11))))
@@ -742,7 +754,7 @@ Also bind `class' to ((class color) (min-colors 89))."
    `(org-mode-line-clock-overrun                      ((t (:foreground ,color-5 :background ,color-9))))
    `(org-ellipsis                                     ((t (:foreground ,color-8 ))))
    `(org-footnote                                     ((t (:foreground ,color-12 ))))
-   `(org-meta-line                                    ((t (:background ,color-4 :foreground ,color-9 :height ,(tao-theme-height 0.8) :inherit fixed-pitch :box ,color-6))))
+   `(org-meta-line                                    ((t (:background ,color-4 :foreground ,color-9 :height ,(tao-theme-height 0.8) :inherit fixed-pitch :box ,(tao-boxed color-6)))))
    `(org-block-begin-line                             ((t (:background ,color-5 :foreground ,color-8 :height ,(tao-theme-height 0.8) :inherit fixed-pitch :box (:color ,color-1 :line-width 1 :style released-button )))))
    `(org-block-end-line                               ((t (:background ,color-5 :foreground ,color-8 :height ,(tao-theme-height 0.8) :inherit fixed-pitch :box (:color ,color-1 :line-width 1 :style released-button )))))      
    `(org-special-keyword                              ((t (:inherit org-meta-line :foreground ,color-9))))
@@ -846,8 +858,8 @@ Also bind `class' to ((class color) (min-colors 89))."
    `(show-paren-mismatch                              ((t (:foreground ,color-1 :background ,color-5 :weight bold))))
    `(show-paren-match                                 ((t (:background ,color-6 :foreground ,color-9))))
    ;; smartparens
-   `(sp-show-pair-mismatch-face                       ((t (:foreground ,color-14 :background ,color-5 :weight bold))))
-   `(sp-show-pair-match-face                          ((t (:background ,color-6 :foreground ,color-9))))
+   `(sp-show-pair-mismatch-face                       ((t (:background ,color-6 :foreground ,color-1 :bold t))))
+   `(sp-show-pair-match-face                          ((t (:background ,color-6 :foreground ,color-14))))
    ;; sml-mode-line
    '(sml-modeline-end-face                            ((t :inherit default :width condensed)))
    ;; SLIME
